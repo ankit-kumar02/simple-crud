@@ -1,11 +1,14 @@
 package controller
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/ankit-kumar02/simple-crud/model"
+	"github.com/ankit-kumar02/simple-crud/resource"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -32,4 +35,44 @@ func UserDetails(c *gin.Context) {
 	// User found, return the user details
 	c.JSON(http.StatusOK, user)
 
+}
+
+func SaveUser(c *gin.Context) {
+	var request struct {
+		Name         string
+		Email        *string
+		Age          int
+		Birthday     string
+		MemberNumber string
+		ActivatedAt  time.Time
+		// other fields...
+	}
+
+	if err := c.ShouldBindJSON(&request); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Parse the string into a time.Time value
+	parsedTime, err := time.Parse("2006-01-02 15:04:05", request.Birthday)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid date format"})
+		return
+	}
+
+	// Create user
+	user := model.User{
+		Name:         request.Name,
+		Email:        request.Email,
+		Age:          uint8(request.Age),
+		Birthday:     &parsedTime,
+		MemberNumber: sql.NullString{String: request.MemberNumber, Valid: request.MemberNumber != ""},
+	}
+
+	model.DB.Create(&user)
+
+	// Filter the user response before sending it to the client
+	filteredUser := resource.FilterUserResponse(&user)
+
+	c.JSON(http.StatusOK, gin.H{"data": filteredUser})
 }
