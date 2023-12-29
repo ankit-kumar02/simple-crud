@@ -3,7 +3,6 @@ package controller
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -31,9 +30,10 @@ func UserDetails(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
 		return
 	}
-	fmt.Println(user)
-	// User found, return the user details
-	c.JSON(http.StatusOK, user)
+
+	filteredUser := resource.FilterUserResponse(&user)
+
+	c.JSON(http.StatusOK, gin.H{"data": filteredUser})
 
 }
 
@@ -75,4 +75,23 @@ func SaveUser(c *gin.Context) {
 	filteredUser := resource.FilterUserResponse(&user)
 
 	c.JSON(http.StatusOK, gin.H{"data": filteredUser})
+}
+func DeleteUser(c *gin.Context) {
+	id := c.Param("id")
+	var user model.User
+	// Query the database to find the user with the specified ID
+	if err := model.DB.Delete(&user, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			// User not found
+			c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+			return
+		}
+
+		// Other database error
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": "User Deleted Succesfully"})
+
 }

@@ -1,6 +1,9 @@
 package model
 
 import (
+	"fmt"
+
+	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -8,7 +11,15 @@ import (
 var DB *gorm.DB
 
 func InitDB() (*gorm.DB, error) {
-	dsn := "root:Ankit@987@tcp(127.0.0.1:3306)/crud?charset=utf8mb4&parseTime=True&loc=Local"
+
+	// Access environment variables using Viper
+	dbHost := viper.GetString("DB_HOST")
+	dbPort := viper.GetInt("DB_PORT")
+	dbUser := viper.GetString("DB_USER")
+	dbPassword := viper.GetString("DB_PASSWORD")
+	dbName := viper.GetString("DB_DATABASE")
+
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local", dbUser, dbPassword, dbHost, dbPort, dbName)
 	var err error
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {

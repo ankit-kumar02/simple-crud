@@ -10,14 +10,12 @@ func FilterUserResponse(user *model.User) gin.H {
 		return gin.H{}
 	}
 
-	// Create a map or struct with only the fields you want to expose
 	filteredUser := gin.H{
 		"ID":           user.ID,
 		"Name":         user.Name,
 		"Age":          user.Age,
-		"Birthday":     user.Birthday.String(), // Assuming Birthday is a time.Time field
+		"Birthday":     user.Birthday.String(),
 		"MemberNumber": user.MemberNumber.String,
-		// Add other fields as needed...
 	}
 
 	return filteredUser
