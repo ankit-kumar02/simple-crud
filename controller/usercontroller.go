@@ -95,3 +95,42 @@ func DeleteUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": "User Deleted Succesfully"})
 
 }
+func UpdateUser(c *gin.Context) {
+	id := c.Param("id")
+	var user model.User
+	var request struct {
+		Name         string
+		Email        *string
+		Age          int
+		Birthday     string
+		MemberNumber string
+
+		// other fields...
+	}
+
+	// Query the database to find the user with the specified ID
+	if err := model.DB.First(&user, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			// User not found
+			c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+			return
+		}
+
+		// Other database error
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+		return
+	}
+	user.Name = request.Name
+	user.Age = uint8(request.Age)
+	// Save the updated user to the database
+	if err := model.DB.Save(&user).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+		return
+	}
+
+	// Filter the user response before sending it to the client
+	filteredUser := resource.FilterUserResponse(&user)
+
+	c.JSON(http.StatusOK, gin.H{"data": filteredUser})
+
+}

@@ -12,4 +12,5 @@ func UrlGeneration() {
 	Router.GET("/userdetails/:id", controller.UserDetails)
 	Router.POST("/userdetails", controller.SaveUser)
 	Router.DELETE("/userdetails/:id", controller.DeleteUser)
+	Router.POST("/updateuserdetails/:id", controller.UpdateUser)
 }
