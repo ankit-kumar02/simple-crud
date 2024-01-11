@@ -32,15 +32,15 @@ func (t BureauRepositoryImpl) Update(bureau model.Bureau) {
 	helper.ErrorPanic(result.Error)
 }
 
-func (t BureauRepositoryImpl) Delete(bureauId int) {
+func (t BureauRepositoryImpl) Delete(bureauId string) {
 	var tags model.Bureau
 	result := t.DB.Where("id = ?", bureauId).Delete(&tags)
 	helper.ErrorPanic(result.Error)
 }
 
-func (t BureauRepositoryImpl) FindById(tagsId int) (model.Bureau, error) {
+func (t BureauRepositoryImpl) FindById(bureauId string) (model.Bureau, error) {
 	var tag model.Bureau
-	result := t.DB.Find(&tag, tagsId)
+	result := t.DB.Find(&tag, bureauId)
 	if result != nil {
 		return tag, nil
 	} else {

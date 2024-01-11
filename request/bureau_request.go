@@ -10,6 +10,6 @@ type CreateBureauRequest struct {
 }
 
 type UpdateBureauRequest struct {
-	UserID                int    `validate:"required"`
-	BureauReferenceNumber string `validate:"required,max=200,min=1" json:"bureau_reference_number"`
+	UserID                int `validate:"required"`
+	BureauReferenceNumber int `validate:"required,max=200,min=1" json:"bureau_reference_number"`
 }

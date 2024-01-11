@@ -7,7 +7,7 @@ import (
 type BureauRepository interface {
 	Save(bureau model.Bureau)
 	Update(bureau model.Bureau)
-	Delete(bureauId int)
-	FindById(bureauId int) (bureau model.Bureau, err error)
+	Delete(bureauId string)
+	FindById(bureauId string) (bureau model.Bureau, err error)
 	FindAll() []model.Bureau
 }
