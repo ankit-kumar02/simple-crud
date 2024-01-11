@@ -4,6 +4,9 @@
  
 2. Run this command 
 
-    go get .
-    go build 
-    go run .
+    -- go get .
+    -- go build 
+    -- go run .
+
+
+Currently User API is working 
