@@ -11,11 +11,12 @@ func FilterUserResponse(user *model.User) gin.H {
 	}
 
 	filteredUser := gin.H{
-		"ID":           user.ID,
-		"Name":         user.Name,
-		"Age":          user.Age,
-		"Birthday":     user.Birthday.String(),
-		"MemberNumber": user.MemberNumber.String,
+		"ID":       user.ID,
+		"Name":     user.Name,
+		"Email":    user.Email,
+		"Age":      user.Age,
+		"Birthday": user.Birthday.String(),
+		"Address":  user.Address,
 	}
 
 	return filteredUser

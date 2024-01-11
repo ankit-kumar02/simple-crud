@@ -15,7 +15,6 @@ func main() {
 		fmt.Println("Error loading .env file")
 	}
 
-	// Set up Viper
 	viper.AutomaticEnv()
 
 	model.InitDB()
