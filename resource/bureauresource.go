@@ -6,5 +6,4 @@ type BureauResponse struct {
 	UserReferenceNumber   string
 	DiffNumM2M8           int
 	CountPlLoan           int
-	NewBureauVariable     string `gorm:"type:json"`
 }
